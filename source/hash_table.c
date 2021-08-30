@@ -344,7 +344,11 @@ static int s_find_entry1(
      * Since probe_idx increments every loop iteration, it will become larger than entry_probe after at most state->size
      * transitions and the loop will exit (if it hasn't already)
      */
-    while (1) {
+    while (1) 
+        __CPROVER_loop_invariant (
+        true
+    )
+    {
 #ifdef CBMC
 #    pragma CPROVER check push
 #    pragma CPROVER check disable "unsigned-overflow"
@@ -712,7 +716,11 @@ int aws_hash_table_foreach(
     int (*callback)(void *context, struct aws_hash_element *pElement),
     void *context) {
 
-    for (struct aws_hash_iter iter = aws_hash_iter_begin(map); !aws_hash_iter_done(&iter); aws_hash_iter_next(&iter)) {
+    for (struct aws_hash_iter iter = aws_hash_iter_begin(map); !aws_hash_iter_done(&iter); aws_hash_iter_next(&iter)) 
+    __CPROVER_loop_invariant(
+        true
+    )
+    {
         int rv = callback(context, &iter.element);
         if (rv & AWS_COMMON_HASH_TABLE_ITER_ERROR) {
             int error = aws_last_error();
@@ -751,7 +759,11 @@ bool aws_hash_table_eq(
      * entries, we can simply iterate one and compare against the same key in
      * the other.
      */
-    for (size_t i = 0; i < a->p_impl->size; ++i) {
+    for (size_t i = 0; i < a->p_impl->size; ++i) 
+    __CPROVER_loop_invariant(
+        true
+    )
+    {
         const struct hash_table_entry *const a_entry = &a->p_impl->slots[i];
         if (a_entry->hash_code == 0) {
             continue;
@@ -788,8 +800,12 @@ static inline void s_get_next_element(struct aws_hash_iter *iter, size_t start_s
     struct hash_table_state *state = iter->map->p_impl;
     size_t limit = iter->limit;
 
-    for (size_t i = start_slot; i < limit; i++) {
-        struct hash_table_entry *entry = &state->slots[i];
+    for (size_t i = start_slot; i < limit; i++) 
+    __CPROVER_loop_invariant (
+        ((i >= 0 && i <= limit) || ((start_slot >= limit) && (i <= start_slot))) // && ((iter->status == AWS_HASH_ITER_STATUS_DONE) ==> !(&state->slots[i].hash_code))
+    )
+    {
+        struct hash_table_entry *entry                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           = &state->slots[i];
 
         if (entry->hash_code) {
             iter->element = entry->element;
@@ -924,7 +940,11 @@ void aws_hash_table_clear(struct aws_hash_table *map) {
 
     /* Check that we have at least one destructor before iterating over the table */
     if (state->destroy_key_fn || state->destroy_value_fn) {
-        for (size_t i = 0; i < state->size; ++i) {
+        for (size_t i = 0; i < state->size; ++i) 
+        __CPROVER_loop_invariant(
+            true
+        )
+        {
             struct hash_table_entry *entry = &state->slots[i];
             if (!entry->hash_code) {
                 continue;

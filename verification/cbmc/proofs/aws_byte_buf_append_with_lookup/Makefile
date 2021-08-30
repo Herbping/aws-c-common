@@ -4,7 +4,9 @@
 ###########
 include ../Makefile.aws_byte_buf
 
-UNWINDSET += aws_byte_buf_append_with_lookup.0:$(shell echo $$(($(MAX_BUFFER_SIZE) + 1)))
+# UNWINDSET += aws_byte_buf_append_with_lookup.0:$(shell echo $$(($(MAX_BUFFER_SIZE) + 1)))
+
+APPLY_LOOP_CONTRACTS=1
 
 CBMCFLAGS +=
 

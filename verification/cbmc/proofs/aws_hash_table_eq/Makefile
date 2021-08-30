@@ -6,7 +6,9 @@
 MAX_TABLE_SIZE ?= 8
 DEFINES += -DMAX_TABLE_SIZE=$(MAX_TABLE_SIZE)
 
-UNWINDSET +=  aws_hash_table_eq.3:$(shell echo $$((1 + $(MAX_TABLE_SIZE))))
+# UNWINDSET +=  aws_hash_table_eq.3:$(shell echo $$((1 + $(MAX_TABLE_SIZE))))
+
+APPLY_LOOP_CONTRACTS=1
 
 CBMCFLAGS +=
 

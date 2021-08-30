@@ -9,7 +9,9 @@ MAX_TABLE_SIZE ?= 8
 
 include ../Makefile.aws_hash_table
 
-UNWINDSET += aws_hash_table_clear.0:$(shell echo $$((1 + $(MAX_TABLE_SIZE))))
+# UNWINDSET += aws_hash_table_clear.0:$(shell echo $$((1 + $(MAX_TABLE_SIZE))))
+
+APPLY_LOOP_CONTRACTS=1
 
 CBMCFLAGS +=
 

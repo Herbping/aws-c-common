@@ -4,7 +4,9 @@
 ###########
 include ../Makefile.aws_byte_buf
 
-UNWINDSET += aws_byte_buf_cat.0:4
+# UNWINDSET += aws_byte_buf_cat.0:4
+
+APPLY_LOOP_CONTRACTS=1
 
 CBMCFLAGS +=
 

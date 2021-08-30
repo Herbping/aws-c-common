@@ -8,6 +8,8 @@
 
 #include <stdarg.h>
 
+
+
 #ifdef _MSC_VER
 /* disables warning non const declared initializers for Microsoft compilers */
 #    pragma warning(disable : 4204)
@@ -337,7 +339,11 @@ int aws_byte_buf_cat(struct aws_byte_buf *dest, size_t number_of_args, ...) {
     va_list ap;
     va_start(ap, number_of_args);
 
-    for (size_t i = 0; i < number_of_args; ++i) {
+    for (size_t i = 0; i < number_of_args; ++i) 
+    __CPROVER_loop_invariant (
+        (i >= 0)
+    )
+    {
         struct aws_byte_buf *buffer = va_arg(ap, struct aws_byte_buf *);
         struct aws_byte_cursor cursor = aws_byte_cursor_from_buf(buffer);
 
@@ -407,7 +413,11 @@ bool aws_array_eq_ignore_case(
 
     const uint8_t *bytes_a = array_a;
     const uint8_t *bytes_b = array_b;
-    for (size_t i = 0; i < len_a; ++i) {
+    for (size_t i = 0; i < len_a; ++i) 
+    __CPROVER_loop_invariant (
+        (i >= 0)
+    )
+    {
         if (s_tolower_table[bytes_a[i]] != s_tolower_table[bytes_b[i]]) {
             return false;
         }
@@ -447,7 +457,11 @@ bool aws_array_eq_c_str_ignore_case(const void *const array, const size_t array_
     const uint8_t *array_bytes = array;
     const uint8_t *str_bytes = (const uint8_t *)c_str;
 
-    for (size_t i = 0; i < array_len; ++i) {
+    for (size_t i = 0; i < array_len; ++i) 
+    __CPROVER_loop_invariant (
+        true
+    )
+    {
         uint8_t s = str_bytes[i];
         if (s == '\0') {
             return false;
@@ -475,7 +489,21 @@ bool aws_array_eq_c_str(const void *const array, const size_t array_len, const c
     const uint8_t *array_bytes = array;
     const uint8_t *str_bytes = (const uint8_t *)c_str;
 
-    for (size_t i = 0; i < array_len; ++i) {
+    // __CPROVER_assume( c_str is well-formed );
+
+    // __CPROVER_object_size
+    
+    for (size_t i = 0; i < array_len; ++i) 
+    __CPROVER_loop_invariant (
+        (i == 0) ||
+        ((str_bytes[i-1] != '\0') &&
+        __CPROVER_forall {
+            int k;
+            (0 <= k && k < MAX_BUFFER_SIZE) ==> ((k < i) ==> (array_bytes[k] == str_bytes[k]))
+        })
+    )
+    // __CPROVER_decreases ( array_len - i )
+    {
         uint8_t s = str_bytes[i];
         if (s == '\0') {
             return false;
@@ -499,7 +527,12 @@ uint64_t aws_hash_array_ignore_case(const void *array, const size_t len) {
     const uint8_t *end = (i == NULL) ? NULL : (i + len);
 
     uint64_t hash = fnv_offset_basis;
-    while (i != end) {
+    while (i != end) 
+    __CPROVER_loop_invariant (
+        // 0 <= i - array <= len
+        ((end == NULL) && (i == NULL)) || ((i >= ((const uint8_t *)array)) && (i <= ((const uint8_t *)array)  + len ))
+    )
+    {
         const uint8_t lower = s_tolower_table[*i++];
         hash ^= lower;
 #ifdef CBMC
@@ -596,7 +629,12 @@ int aws_byte_buf_append_with_lookup(
         return aws_raise_error(AWS_ERROR_DEST_COPY_TOO_SMALL);
     }
 
-    for (size_t i = 0; i < from->len; ++i) {
+    for (size_t i = 0; i < from->len; ++i) 
+    /*__CPROVER_loop_invariant (
+        (i >= 0)
+    )*/
+    // assign clause
+    {
         to->buffer[to->len + i] = lookup_table[from->ptr[i]];
     }
 

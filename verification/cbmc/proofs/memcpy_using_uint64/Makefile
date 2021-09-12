@@ -7,8 +7,10 @@
 MAX = 160
 DEFINES += -DMAX=$(MAX)
 
-UNWINDSET += memcpy_impl.0:$(shell echo $$(($(MAX) + 1)))
-UNWINDSET += memcpy_using_uint64_impl.0:$(shell echo $$(( $$(( $(MAX) / 8 )) + 1)))
+# UNWINDSET += memcpy_impl.0:$(shell echo $$(($(MAX) + 1)))
+# UNWINDSET += memcpy_using_uint64_impl.0:$(shell echo $$(( $$(( $(MAX) / 8 )) + 1)))
+
+APPLY_LOOP_CONTRACTS=1
 
 CBMCFLAGS +=
 

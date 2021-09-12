@@ -29,7 +29,14 @@ void *memcpy_impl(void *dst, const void *src, size_t n) {
     __CPROVER_precondition(__CPROVER_w_ok(dst, n), "memcpy destination region writeable");
 
     for (__CPROVER_size_t i = 0; i < n; ++i)
+    __CPROVER_loop_invariant(
+        __CPROVER_forall {
+            int k;
+            (0 <= k && k < MAX) ==> ((k < i) ==> (((char *)dst)[k] == ((const char *)src)[k]))
+        }
+    ){
         ((char *)dst)[i] = ((const char *)src)[i];
+    }
 
     return dst;
 }

@@ -459,7 +459,7 @@ bool aws_array_eq_c_str_ignore_case(const void *const array, const size_t array_
 
     for (size_t i = 0; i < array_len; ++i) 
     __CPROVER_loop_invariant (
-        true
+        (0 <= i) && (i < __CPROVER_OBJECT_SIZE(str_bytes))
     )
     {
         uint8_t s = str_bytes[i];
@@ -488,19 +488,16 @@ bool aws_array_eq_c_str(const void *const array, const size_t array_len, const c
 
     const uint8_t *array_bytes = array;
     const uint8_t *str_bytes = (const uint8_t *)c_str;
-
-    // __CPROVER_assume( c_str is well-formed );
-
-    // __CPROVER_object_size
     
     for (size_t i = 0; i < array_len; ++i) 
     __CPROVER_loop_invariant (
-        (i == 0) ||
-        ((str_bytes[i-1] != '\0') &&
+        (0 <= i) && (i < __CPROVER_OBJECT_SIZE(str_bytes)) &&
+        ((i == 0) ||
+        (
         __CPROVER_forall {
             int k;
             (0 <= k && k < MAX_BUFFER_SIZE) ==> ((k < i) ==> (array_bytes[k] == str_bytes[k]))
-        })
+        }))
     )
     // __CPROVER_decreases ( array_len - i )
     {
@@ -513,7 +510,6 @@ bool aws_array_eq_c_str(const void *const array, const size_t array_len, const c
             return false;
         }
     }
-
     return str_bytes[array_len] == '\0';
 }
 
@@ -527,13 +523,18 @@ uint64_t aws_hash_array_ignore_case(const void *array, const size_t len) {
     const uint8_t *end = (i == NULL) ? NULL : (i + len);
 
     uint64_t hash = fnv_offset_basis;
-    while (i != end) 
+
+
+ //   while (i != end) 
+    for( size_t j = 0; j < len; j++)
     __CPROVER_loop_invariant (
         // 0 <= i - array <= len
-        ((end == NULL) && (i == NULL)) || ((i >= ((const uint8_t *)array)) && (i <= ((const uint8_t *)array)  + len ))
+        // ((end == NULL) && (i == NULL)) || ((i >= ((const uint8_t *)array)) && (i <= ((const uint8_t *)array)  + len ))
+        ((len == 0) && (i == NULL)) ||  (j <= len)
     )
     {
-        const uint8_t lower = s_tolower_table[*i++];
+        const uint8_t lower = s_tolower_table[*(i+j)];
+        // const uint8_t lower = s_tolower_table[*i++];
         hash ^= lower;
 #ifdef CBMC
 #    pragma CPROVER check push

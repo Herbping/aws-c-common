@@ -7,8 +7,8 @@
 MAX_TABLE_SIZE ?= 2
 DEFINES += -DMAX_TABLE_SIZE=$(MAX_TABLE_SIZE)
 
-UNWINDSET +=__CPROVER_file_local_hash_table_c_s_find_entry1.0:$(shell echo $$((1 + $(MAX_TABLE_SIZE))))
-UNWINDSET += __CPROVER_file_local_hash_table_c_s_emplace_item.0:$(shell echo $$((1 + $$(( 2 * $(MAX_TABLE_SIZE) )) )) )
+#UNWINDSET +=__CPROVER_file_local_hash_table_c_s_find_entry1.0:$(shell echo $$((1 + $(MAX_TABLE_SIZE))))
+#UNWINDSET += __CPROVER_file_local_hash_table_c_s_emplace_item.0:$(shell echo $$((1 + $$(( 2 * $(MAX_TABLE_SIZE) )) )) )
 
 CBMCFLAGS +=
 

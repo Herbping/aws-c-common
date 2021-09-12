@@ -54,7 +54,13 @@ void *memcpy_using_uint64_impl(void *dst, const void *src, size_t n) {
     d += rem;
     s += rem;
 
-    for (size_t i = 0; i < num_uint64s; ++i) {
+    for (size_t i = 0; i < num_uint64s; ++i) 
+    __CPROVER_loop_invariant(
+                __CPROVER_forall {
+            int k;
+            (0 <= k && k < MAX) ==> ((k < i) ==> (((uint64_t *)d)[k] == ((const uint64_t *)s)[k]))
+        }
+    ){
         ((uint64_t *)d)[i] = ((const uint64_t *)s)[i];
     }
 

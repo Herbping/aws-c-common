@@ -89,7 +89,11 @@ AWS_STATIC_IMPL bool aws_linked_list_is_valid_deep(const struct aws_linked_list 
     /* By satisfying the above and that edges are bidirectional, we
      * also guarantee that tail reaches head by following prev
      * pointers */
-    while (temp) {
+    while (temp) 
+    __CPROVER_loop_invariant(
+        true
+    )
+    {
         if (temp == &list->tail) {
             head_reaches_tail = true;
             break;

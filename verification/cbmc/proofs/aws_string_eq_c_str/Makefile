@@ -3,9 +3,13 @@
 
 include ../Makefile.aws_string
 
-UNWINDSET += aws_array_eq_c_str.0:$(shell echo $$(($(MAX_STRING_LEN) + 1)))
-UNWINDSET += memcmp.0:$(shell echo $$(($(MAX_STRING_LEN) + 1)))
-UNWINDSET += strlen.0:$(shell echo $$(($(MAX_STRING_LEN) + 1)))
+# UNWINDSET += aws_array_eq_c_str.0:$(shell echo $$(($(MAX_STRING_LEN) + 1)))
+# UNWINDSET += memcmp.0:$(shell echo $$(($(MAX_STRING_LEN) + 1)))
+# UNWINDSET += strlen.0:$(shell echo $$(($(MAX_STRING_LEN) + 1)))
+
+APPLY_LOOP_CONTRACTS=1
+MAX_BUFFER_SIZE ?= 10
+DEFINES += -DMAX_BUFFER_SIZE=$(MAX_BUFFER_SIZE)
 
 CBMCFLAGS +=
 

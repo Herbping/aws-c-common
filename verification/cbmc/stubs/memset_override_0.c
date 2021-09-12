@@ -25,7 +25,11 @@ void *memset_override_0_impl(void *dst, int c, size_t n) {
 
     uint64_t *d = (uint64_t *)dst;
 
-    for (size_t i = 0; i < num_uint64s; ++i) {
+    for (size_t i = 0; i < num_uint64s; ++i) 
+        __CPROVER_loop_invariant (
+        (i >= 0)
+    )
+    {
         d[i] = 0;
     }
 

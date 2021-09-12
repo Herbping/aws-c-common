@@ -345,7 +345,7 @@ static int s_find_entry1(
      * transitions and the loop will exit (if it hasn't already)
      */
     while (1) 
-        __CPROVER_loop_invariant (
+    __CPROVER_loop_invariant (
         true
     )
     {
@@ -437,7 +437,11 @@ static struct hash_table_entry *s_emplace_item(
 
     /* Since a valid hash_table has at least one empty element, this loop will always terminate in at most linear time
      */
-    while (entry.hash_code != 0) {
+    while (entry.hash_code != 0) 
+    __CPROVER_loop_invariant (
+        true
+    )
+    {
 #ifdef CBMC
 #    pragma CPROVER check push
 #    pragma CPROVER check disable "unsigned-overflow"

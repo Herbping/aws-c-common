@@ -496,7 +496,7 @@ bool aws_array_eq_c_str(const void *const array, const size_t array_len, const c
         (
         __CPROVER_forall {
             int k;
-            (0 <= k && k < MAX_BUFFER_SIZE) ==> ((k < i) ==> (array_bytes[k] == str_bytes[k]))
+            (0 <= k && k < MAX_BUFFER_SIZE) ==> ((k < i) ==> ((array_bytes[k] == str_bytes[k]) && (str_bytes[k] != '\0')))
         }))
     )
     // __CPROVER_decreases ( array_len - i )

@@ -6,6 +6,36 @@
 #include <aws/common/byte_buf.h>
 #include <proof_helpers/make_common_data_structures.h>
 
+size_t _strlen(const char *s)
+  __CPROVER_requires(s != NULL && __CPROVER_exists {
+    int i;
+    (0 <= i && i < MAX_BUFFER_SIZE) ==> (i < __CPROVER_OBJECT_SIZE(s)) ==> s[i] == '\0'
+  })
+  __CPROVER_ensures(
+    __CPROVER_return_value < __CPROVER_OBJECT_SIZE(s)
+    &&
+    ( (s[0] == '\0' && __CPROVER_return_value == 0) || (
+    s[__CPROVER_return_value]=='\0' &&  __CPROVER_forall {
+    int i;
+    (0 <= i && i < MAX_BUFFER_SIZE) ==> (i < __CPROVER_return_value) ==> s[i] != '\0'
+  }))
+  )
+{
+  __CPROVER_size_t len=0;
+  while(s[len]!=0)
+  __CPROVER_loop_invariant (
+        (0 <= len) && (len < __CPROVER_OBJECT_SIZE(s)) &&
+        ((len == 0) ||
+        (
+        __CPROVER_forall {
+            int k;
+            (0 <= k && k < MAX_BUFFER_SIZE) ==> ((k < len) ==>  (s[k] != '\0'))
+        }))
+    )
+    len++;
+  return len;
+}
+
 void aws_array_eq_c_str_harness() {
     /* assumptions */
     void *array;
@@ -17,7 +47,7 @@ void aws_array_eq_c_str_harness() {
     /* save current state of the parameters */
     struct store_byte_from_buffer old_byte_from_array;
     save_byte_from_array((uint8_t *)array, array_len, &old_byte_from_array);
-    size_t str_len = (c_str != NULL) ? strlen(c_str) : 0;
+    size_t str_len = (c_str != NULL) ? _strlen(c_str) : 0;
     struct store_byte_from_buffer old_byte_from_str;
     save_byte_from_array((uint8_t *)c_str, str_len, &old_byte_from_str);
 

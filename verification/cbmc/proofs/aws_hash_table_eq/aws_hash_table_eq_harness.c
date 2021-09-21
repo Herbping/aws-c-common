@@ -10,7 +10,20 @@
 
 void aws_hash_table_eq_harness() {
     struct aws_hash_table map_a;
-    ensure_allocated_hash_table(&map_a, MAX_TABLE_SIZE);
+    // ensure_allocated_hash_table(&map_a, MAX_TABLE_SIZE);
+    size_t num_entries_a;
+    __CPROVER_assume(aws_is_power_of_two(num_entries_a));
+
+    size_t required_bytes_a;
+    __CPROVER_assume(!hash_table_state_required_bytes(num_entries_a, &required_bytes_a));
+    struct hash_table_state *impl_a = malloc(required_bytes_a);
+    if (impl_a) {
+        impl_a->size = num_entries_a;
+        map_a.p_impl = impl_a;
+    } else {
+        map_a.p_impl = NULL;
+    }
+
     __CPROVER_assume(aws_hash_table_is_valid(&map_a));
     map_a.p_impl->equals_fn = uninterpreted_equals_assert_inputs_nonnull;
     map_a.p_impl->hash_fn = uninterpreted_hasher;
@@ -18,7 +31,20 @@ void aws_hash_table_eq_harness() {
     save_byte_from_hash_table(&map_a, &old_byte_a);
 
     struct aws_hash_table map_b;
-    ensure_allocated_hash_table(&map_b, MAX_TABLE_SIZE);
+    // ensure_allocated_hash_table(&map_b, MAX_TABLE_SIZE);
+    size_t num_entries_b;
+    __CPROVER_assume(aws_is_power_of_two(num_entries_b));
+
+    size_t required_bytes_b;
+    __CPROVER_assume(!hash_table_state_required_bytes(num_entries_b, &required_bytes_b));
+    struct hash_table_state *impl_b = malloc(required_bytes_b);
+    if (impl_b) {
+        impl_b->size = num_entries_b;
+        map_b.p_impl = impl_b;
+    } else {
+        map_b.p_impl = NULL;
+    }
+
     __CPROVER_assume(aws_hash_table_is_valid(&map_b));
     map_b.p_impl->equals_fn = uninterpreted_equals_assert_inputs_nonnull;
     map_b.p_impl->hash_fn = uninterpreted_hasher;

@@ -15,7 +15,7 @@ void aws_byte_buf_init_copy_from_cursor_harness() {
     struct aws_byte_cursor cursor;
 
     /* assumptions */
-    __CPROVER_assume(aws_byte_cursor_is_bounded(&cursor, MAX_BUFFER_SIZE));
+    // __CPROVER_assume(aws_byte_cursor_is_bounded(&cursor, MAX_BUFFER_SIZE));
     ensure_byte_cursor_has_allocated_buffer_member(&cursor);
     __CPROVER_assume(aws_byte_cursor_is_valid(&cursor));
 

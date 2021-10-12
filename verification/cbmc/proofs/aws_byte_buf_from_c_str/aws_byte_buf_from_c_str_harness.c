@@ -8,7 +8,14 @@
 
 void aws_byte_buf_from_c_str_harness() {
     /* parameter */
-    const char *c_str = ensure_c_str_is_allocated(MAX_BUFFER_SIZE);
+    // const char *c_str = ensure_c_str_is_allocated(MAX_BUFFER_SIZE);
+    size_t cap;
+    __CPROVER_assume(cap > 0);
+    const char *c_str = malloc(cap);
+    /* Ensure that its a valid c string. Since all bytes are nondeterminstic, the actual
+     * string length is 0..str_cap
+     */
+    __CPROVER_assume(IMPLIES(c_str != NULL, c_str[cap - 1] == '\0'));
 
     /* operation under verification */
     struct aws_byte_buf buf = aws_byte_buf_from_c_str(c_str);

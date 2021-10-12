@@ -12,10 +12,10 @@ void aws_byte_buf_write_from_whole_buffer_harness() {
     struct aws_byte_buf src;
 
     /* assumptions */
-    __CPROVER_assume(aws_byte_buf_is_bounded(&buf, MAX_BUFFER_SIZE));
+    // __CPROVER_assume(aws_byte_buf_is_bounded(&buf, MAX_BUFFER_SIZE));
     ensure_byte_buf_has_allocated_buffer_member(&buf);
     __CPROVER_assume(aws_byte_buf_is_valid(&buf));
-    __CPROVER_assume(aws_byte_buf_is_bounded(&src, MAX_BUFFER_SIZE));
+    // __CPROVER_assume(aws_byte_buf_is_bounded(&src, MAX_BUFFER_SIZE));
     ensure_byte_buf_has_allocated_buffer_member(&src);
     __CPROVER_assume(aws_byte_buf_is_valid(&src));
 

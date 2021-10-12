@@ -3,7 +3,7 @@
 
 ###########
 include ../Makefile.aws_byte_buf
-UNWINDSET += memset_impl.0:$(shell echo $$(($(MAX_BUFFER_SIZE) + 1)))
+# UNWINDSET += memset_impl.0:$(shell echo $$(($(MAX_BUFFER_SIZE) + 1)))
 
 CBMCFLAGS +=
 
@@ -17,7 +17,7 @@ PROJECT_SOURCES += $(SRCDIR)/source/allocator.c
 PROOF_SOURCES += $(PROOF_SOURCE)/utils.c
 
 PROOF_SOURCES += $(PROOF_STUB)/error.c
-PROOF_SOURCES += $(PROOF_STUB)/memset_override.c
+# PROOF_SOURCES += $(PROOF_STUB)/memset_override.c
 
 PROJECT_SOURCES += $(SRCDIR)/source/byte_buf.c
 PROJECT_SOURCES += $(SRCDIR)/source/common.c

@@ -12,13 +12,13 @@ void aws_byte_buf_eq_ignore_case_harness() {
     struct aws_byte_buf rhs;
 
     /* assumptions */
-    __CPROVER_assume(aws_byte_buf_is_bounded(&lhs, MAX_BUFFER_SIZE));
+    // __CPROVER_assume(aws_byte_buf_is_bounded(&lhs, MAX_BUFFER_SIZE));
     ensure_byte_buf_has_allocated_buffer_member(&lhs);
     __CPROVER_assume(aws_byte_buf_is_valid(&lhs));
     if (nondet_bool()) {
         rhs = lhs;
     } else {
-        __CPROVER_assume(aws_byte_buf_is_bounded(&rhs, MAX_BUFFER_SIZE));
+        // __CPROVER_assume(aws_byte_buf_is_bounded(&rhs, MAX_BUFFER_SIZE));
         ensure_byte_buf_has_allocated_buffer_member(&rhs);
         __CPROVER_assume(aws_byte_buf_is_valid(&rhs));
     }

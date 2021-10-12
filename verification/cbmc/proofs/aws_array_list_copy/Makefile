@@ -6,6 +6,9 @@ include ../Makefile.aws_array_list
 
 UNWINDSET +=
 
+APPLY_LOOP_CONTRACTS = 1
+PROOF_SOURCES += $(PROOF_STUB)/memcpy_override.c
+
 CBMCFLAGS +=
 
 PROOF_UID = aws_array_list_copy
@@ -18,7 +21,7 @@ PROOF_SOURCES += $(PROOF_SOURCE)/make_common_data_structures.c
 PROOF_SOURCES += $(PROOF_SOURCE)/utils.c
 
 PROOF_SOURCES += $(PROOF_STUB)/error.c
-PROOF_SOURCES += $(PROOF_STUB)/memcpy_override_havoc.c
+# PROOF_SOURCES += $(PROOF_STUB)/memcpy_override_havoc.c
 
 PROJECT_SOURCES += $(SRCDIR)/source/array_list.c
 PROJECT_SOURCES += $(SRCDIR)/source/common.c

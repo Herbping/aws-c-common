@@ -565,9 +565,6 @@ uint64_t aws_hash_array_ignore_case(const void *array, const size_t len) {
     
     while (i != end) 
     __CPROVER_loop_invariant (
-        !__CPROVER_is_invalid_pointer(i) 
-    )
-    __CPROVER_loop_invariant (
         (i == NULL) == (array == NULL)
     )
     __CPROVER_loop_invariant (

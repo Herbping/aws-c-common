@@ -441,17 +441,24 @@ int _memcmp(const void *s1, const void *s2, size_t n)
   __CPROVER_precondition(__CPROVER_r_ok(s2, n),
                          "memcpy region 2 readable");
 
-  const unsigned char *sc1=s1, *sc2=s2;
+  const unsigned char *sc1, *sc2;
+  sc1 = s1;
+  sc2 = s2;
   for(; n!=0; n--)
   __CPROVER_loop_invariant (
-    sc1 != NULL && sc2 != NULL && __CPROVER_IS_INVALID_POINTER(sc1) && __CPROVER_IS_INVALID_POINTER(sc2)
-    (0 <= __CPROVER_POINTER_OFFSET(sc1)) && (__CPROVER_POINTER_OFFSET(sc1) < __CPROVER_OBJECT_SIZE(sc1)) && 
-    (0 <= __CPROVER_POINTER_OFFSET(sc2)) && (__CPROVER_POINTER_OFFSET(sc2) < __CPROVER_OBJECT_SIZE(sc2)) &&
-    __CPROVER_same_object(sc1, s1) && __CPROVER_same_object(sc2, s2) && 
-    (__CPROVER_POINTER_OFFSET(sc1) == __CPROVER_POINTER_OFFSET(sc2)) &&
-    (n + __CPROVER_POINTER_OFFSET(sc1) < __CPROVER_OBJECT_SIZE(sc1)) &&
-    (n + __CPROVER_POINTER_OFFSET(sc2) < __CPROVER_OBJECT_SIZE(sc2)) 
-  )
+    sc1 != NULL && sc2 != NULL)
+  __CPROVER_loop_invariant (
+    __CPROVER_same_object(sc1, s1) && __CPROVER_same_object(sc2, s2))
+  __CPROVER_loop_invariant (    
+    (0 <= __CPROVER_POINTER_OFFSET(sc1)) && (__CPROVER_POINTER_OFFSET(sc1) <= __CPROVER_OBJECT_SIZE(sc1)) && 
+    (0 <= __CPROVER_POINTER_OFFSET(sc2)) && (__CPROVER_POINTER_OFFSET(sc2) <= __CPROVER_OBJECT_SIZE(sc2)))
+  __CPROVER_loop_invariant (    
+      (__CPROVER_POINTER_OFFSET(sc1) == __CPROVER_POINTER_OFFSET(sc2)))
+  __CPROVER_loop_invariant (    
+        n <= __CPROVER_loop_entry(n))
+  __CPROVER_loop_invariant (    
+        (n * sizeof(unsigned char) + __CPROVER_POINTER_OFFSET(sc1) ==  __CPROVER_loop_entry(n)) &&
+    (n * sizeof(unsigned char) + __CPROVER_POINTER_OFFSET(sc2) ==  __CPROVER_loop_entry(n) ))
   {
     res = (*sc1++) - (*sc2++);
     if (res != 0)
@@ -474,8 +481,8 @@ bool aws_array_eq(const void *const array_a, const size_t len_a, const void *con
     if (len_a == 0) {
         return true;
     }
-
-    return !_memcmp(array_a, array_b, len_a);
+    int result = !_memcmp(array_a, array_b, len_a);
+    return result;
 }
 
 bool aws_array_eq_c_str_ignore_case(const void *const array, const size_t array_len, const char *const c_str) {
@@ -526,15 +533,8 @@ bool aws_array_eq_c_str(const void *const array, const size_t array_len, const c
     
     for (size_t i = 0; i < array_len; ++i) 
     __CPROVER_loop_invariant (
-        (0 <= i) && (i < __CPROVER_OBJECT_SIZE(str_bytes)) &&
-        ((i == 0) ||
-        (
-        __CPROVER_forall {
-            int k;
-            (0 <= k && k < MAX_BUFFER_SIZE) ==> ((k < i) ==> ((array_bytes[k] == str_bytes[k]) && (str_bytes[k] != '\0')))
-        }))
+        (0 <= i) && (i < __CPROVER_OBJECT_SIZE(str_bytes))
     )
-    // __CPROVER_decreases ( array_len - i )
     {
         uint8_t s = str_bytes[i];
         if (s == '\0') {
@@ -559,17 +559,25 @@ uint64_t aws_hash_array_ignore_case(const void *array, const size_t len) {
 
     uint64_t hash = fnv_offset_basis;
 
-
- //   while (i != end) 
-    for( size_t j = 0; j < len; j++)
+    
+    // array <= i < array + end
+    // object_id object_offset
+    
+    while (i != end) 
     __CPROVER_loop_invariant (
-        // 0 <= i - array <= len
-        // ((end == NULL) && (i == NULL)) || ((i >= ((const uint8_t *)array)) && (i <= ((const uint8_t *)array)  + len ))
-        ((len == 0) && (i == NULL)) ||  (j <= len)
+        !__CPROVER_is_invalid_pointer(i) 
+    )
+    __CPROVER_loop_invariant (
+        (i == NULL) == (array == NULL)
+    )
+    __CPROVER_loop_invariant (
+        __CPROVER_same_object(i, array)
+    )
+    __CPROVER_loop_invariant (
+       (0 <= __CPROVER_POINTER_OFFSET(i) && __CPROVER_POINTER_OFFSET(i) <= __CPROVER_OBJECT_SIZE(i))
     )
     {
-        const uint8_t lower = s_tolower_table[*(i+j)];
-        // const uint8_t lower = s_tolower_table[*i++];
+        const uint8_t lower = s_tolower_table[*i++];
         hash ^= lower;
 #ifdef CBMC
 #    pragma CPROVER check push

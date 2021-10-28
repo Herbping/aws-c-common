@@ -6,7 +6,7 @@ include ../Makefile.aws_byte_buf
 
 # UNWINDSET += aws_hash_array_ignore_case.0:$(shell echo $$((1 + $(MAX_BUFFER_SIZE))))
 
-APPLY_LOOP_CONTRACTS=1
+ APPLY_LOOP_CONTRACTS=1
 
 CBMCFLAGS +=
 

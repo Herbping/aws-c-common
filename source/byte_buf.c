@@ -533,14 +533,15 @@ bool aws_array_eq_c_str(const void *const array, const size_t array_len, const c
     
     for (size_t i = 0; i < array_len; ++i) 
     __CPROVER_loop_invariant (
-        (0 <= i) && (i < __CPROVER_OBJECT_SIZE(str_bytes))
+        (0 <= i) && (i <= __CPROVER_OBJECT_SIZE(str_bytes)) &&
+        (i == 0|| str_bytes[i-1] != 0)
     )
     {
         uint8_t s = str_bytes[i];
+        uint8_t s1 = array_bytes[i];
         if (s == '\0') {
             return false;
         }
-
         if (array_bytes[i] != s) {
             return false;
         }
@@ -1582,6 +1583,7 @@ bool aws_byte_buf_write_u8_n(struct aws_byte_buf *buf, uint8_t c, size_t count) 
  */
 bool aws_byte_buf_write_be16(struct aws_byte_buf *buf, uint16_t x) {
     AWS_PRECONDITION(aws_byte_buf_is_valid(buf));
+    int y = ((int)x << 8) | ((int)x >> 8);
     x = aws_hton16(x);
     return aws_byte_buf_write(buf, (uint8_t *)&x, 2);
 }

@@ -175,13 +175,19 @@ static void aws_array_list_mem_swap(void *AWS_RESTRICT item1, void *AWS_RESTRICT
     /* copy SLICE sized bytes at a time */
     size_t slice_count = item_size / SLICE;
     uint8_t temp[SLICE];
-    for (size_t i = 0; i < slice_count; i++) {
+    for (size_t i = 0; i < slice_count; i++) 
+    __CPROVER_loop_invariant(i <= slice_count)
+    __CPROVER_loop_invariant(__CPROVER_same_object(item1, __CPROVER_loop_entry(item1)))
+    __CPROVER_loop_invariant(__CPROVER_same_object(item2, __CPROVER_loop_entry(item2)))
+    __CPROVER_loop_invariant(item1 == __CPROVER_loop_entry(item1) + i*SLICE)
+    __CPROVER_loop_invariant(item2 == __CPROVER_loop_entry(item2) + i*SLICE)
+    {
         memcpy((void *)temp, (void *)item1, SLICE);
         memcpy((void *)item1, (void *)item2, SLICE);
         memcpy((void *)item2, (void *)temp, SLICE);
         item1 = (uint8_t *)item1 + SLICE;
         item2 = (uint8_t *)item2 + SLICE;
-    }
+    } 
 
     size_t remainder = item_size & (SLICE - 1); /* item_size % SLICE */
     memcpy((void *)temp, (void *)item1, remainder);

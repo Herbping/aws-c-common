@@ -5,7 +5,9 @@
 include ../Makefile.aws_array_list
 
 # This bound allows us to reach 100% coverage rate
-UNWINDSET += aws_array_list_mem_swap.0:$(shell echo $$(($(MAX_ITEM_SIZE) + 1)))
+# UNWINDSET += aws_array_list_mem_swap.0:$(shell echo $$(($(MAX_ITEM_SIZE) + 1)))
+
+APPLY_LOOP_CONTRACTS = 1
 
 CBMCFLAGS +=
 
@@ -18,7 +20,7 @@ PROJECT_SOURCES += $(SRCDIR)/source/allocator.c
 PROOF_SOURCES += $(PROOF_SOURCE)/make_common_data_structures.c
 PROOF_SOURCES += $(PROOF_SOURCE)/utils.c
 PROOF_SOURCES += $(PROOF_STUB)/error.c
-PROOF_SOURCES += $(PROOF_STUB)/memcpy_override_havoc.c
+# PROOF_SOURCES += $(PROOF_STUB)/memcpy_override_havoc.c
 PROJECT_SOURCES += $(SRCDIR)/source/array_list.c
 PROJECT_SOURCES += $(SRCDIR)/source/common.c
 

@@ -7,8 +7,8 @@ include ../Makefile.aws_byte_buf
 # UNWINDSET += aws_array_eq_c_str.0:$(shell echo $$(($(MAX_BUFFER_SIZE) + 1)))
 # UNWINDSET += strlen.0:$(shell echo $$(($(MAX_BUFFER_SIZE) + 1)))
 
-USE_FUNCTION_CONTRACTS = _strlen
-CHECK_FUNCTION_CONTRACTS = _strlen
+# USE_FUNCTION_CONTRACTS = _strlen
+# CHECK_FUNCTION_CONTRACTS = _strlen
 
 APPLY_LOOP_CONTRACTS=1
 

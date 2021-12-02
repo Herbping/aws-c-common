@@ -9,10 +9,12 @@ MAX_TABLE_SIZE ?= 4
 
 include ../Makefile.aws_hash_table
 
-UNWINDSET += aws_hash_table_clear.0:$(shell echo $$((1 + $(MAX_TABLE_SIZE))))
-UNWINDSET += memset_override_0_impl.0:$(shell echo $$((1 + $(TABLE_SIZE_IN_WORDS))))
+# UNWINDSET += aws_hash_table_clear.0:$(shell echo $$((1 + $(MAX_TABLE_SIZE))))
+# UNWINDSET += memset_override_0_impl.0:$(shell echo $$((1 + $(TABLE_SIZE_IN_WORDS))))
 
 CBMCFLAGS +=
+APPLY_LOOP_CONTRACTS=1
+
 
 PROOF_UID = aws_hash_table_clear
 HARNESS_ENTRY = $(PROOF_UID)_harness
@@ -24,7 +26,7 @@ PROJECT_SOURCES += $(SRCDIR)/source/allocator.c
 PROOF_SOURCES += $(PROOF_SOURCE)/utils.c
 
 PROOF_SOURCES += $(PROOF_STUB)/error.c
-PROOF_SOURCES += $(PROOF_STUB)/memset_override_0.c
+# PROOF_SOURCES += $(PROOF_STUB)/memset_override_0.c
 
 PROJECT_SOURCES += $(SRCDIR)/source/common.c
 PROJECT_SOURCES += $(SRCDIR)/source/hash_table.c

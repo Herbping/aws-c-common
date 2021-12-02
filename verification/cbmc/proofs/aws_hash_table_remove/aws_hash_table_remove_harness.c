@@ -10,7 +10,21 @@
 
 void aws_hash_table_remove_harness() {
     struct aws_hash_table map;
-    ensure_allocated_hash_table(&map, MAX_TABLE_SIZE);
+    // ensure_allocated_hash_table(&map, MAX_TABLE_SIZE);
+
+    size_t num_entries;
+    __CPROVER_assume(aws_is_power_of_two(num_entries));
+
+    size_t required_bytes;
+    __CPROVER_assume(!hash_table_state_required_bytes(num_entries, &required_bytes));
+    struct hash_table_state *impl = malloc(required_bytes);
+    if (impl) {
+        impl->size = num_entries;
+        map.p_impl = impl;
+    } else {
+        map.p_impl = NULL;
+    }
+    
     __CPROVER_assume(aws_hash_table_is_valid(&map));
     map.p_impl->destroy_key_fn = nondet_bool() ? NULL : hash_proof_destroy_noop;
     map.p_impl->destroy_value_fn = nondet_bool() ? NULL : hash_proof_destroy_noop;

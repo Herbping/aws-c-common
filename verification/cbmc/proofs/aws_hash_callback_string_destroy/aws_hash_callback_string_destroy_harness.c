@@ -9,7 +9,8 @@
 #include <stddef.h>
 
 void aws_hash_callback_string_destroy_harness() {
-    struct aws_string *str = nondet_allocate_string_bounded_length(MAX_STRING_LEN);
+    size_t size;
+    struct aws_string *str = nondet_allocate_string_bounded_length(size);
 
     __CPROVER_assume(aws_string_is_valid(str));
 

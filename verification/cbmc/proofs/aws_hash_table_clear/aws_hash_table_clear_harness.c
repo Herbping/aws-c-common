@@ -10,7 +10,8 @@
 
 void aws_hash_table_clear_harness() {
     struct aws_hash_table map;
-    ensure_allocated_hash_table(&map, MAX_TABLE_SIZE);
+    size_t size;
+    ensure_allocated_hash_table(&map, size);
     __CPROVER_assume(aws_hash_table_is_valid(&map));
     ensure_hash_table_has_valid_destroy_functions(&map);
 

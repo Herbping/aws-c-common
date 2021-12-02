@@ -9,8 +9,11 @@
 MAX_STRING_LEN ?= 64
 DEFINES += -DMAX_STRING_LEN=$(MAX_STRING_LEN)
 
-UNWINDSET += strcmp.0:$(shell echo $$(($(MAX_STRING_LEN) + 1)))
-UNWINDSET += strlen.0:$(shell echo $$(($(MAX_STRING_LEN) + 1)))
+# UNWINDSET += strcmp.0:$(shell echo $$(($(MAX_STRING_LEN) + 1)))
+# UNWINDSET += strlen.0:$(shell echo $$(($(MAX_STRING_LEN) + 1)))
+
+
+APPLY_LOOP_CONTRACTS=1
 
 CBMCFLAGS +=
 

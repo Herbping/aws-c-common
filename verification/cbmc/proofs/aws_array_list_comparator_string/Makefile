@@ -3,7 +3,9 @@
 
 include ../Makefile.aws_string
 
-UNWINDSET += memcmp.0:$(shell echo $$(($(MAX_STRING_LEN) + 1)))
+# UNWINDSET += memcmp.0:$(shell echo $$(($(MAX_STRING_LEN) + 1)))
+
+APPLY_LOOP_CONTRACTS=1
 
 CBMCFLAGS +=
 

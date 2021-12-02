@@ -9,7 +9,7 @@
 void aws_array_eq_harness() {
     /* assumptions */
     size_t lhs_len;
-    __CPROVER_assume(lhs_len <= MAX_BUFFER_SIZE);
+    __CPROVER_assume(lhs_len <= 36028797018963960);
     void *lhs = malloc(lhs_len);
 
     void *rhs;
@@ -18,7 +18,7 @@ void aws_array_eq_harness() {
         rhs_len = lhs_len;
         rhs = lhs;
     } else {
-        __CPROVER_assume(rhs_len <= MAX_BUFFER_SIZE);
+        __CPROVER_assume(rhs_len <= 36028797018963960);
         rhs = malloc(rhs_len);
     }
 

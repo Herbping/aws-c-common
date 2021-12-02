@@ -14,7 +14,7 @@ void aws_priority_queue_capacity_harness() {
     struct aws_priority_queue queue;
 
     /* assumptions */
-    __CPROVER_assume(aws_priority_queue_is_bounded(&queue, MAX_INITIAL_ITEM_ALLOCATION, MAX_ITEM_SIZE));
+    // __CPROVER_assume(aws_priority_queue_is_bounded(&queue, MAX_INITIAL_ITEM_ALLOCATION, MAX_ITEM_SIZE));
     ensure_priority_queue_has_allocated_members(&queue);
     __CPROVER_assume(aws_priority_queue_is_valid(&queue));
     __CPROVER_assume(queue.container.item_size > 0);

@@ -7,10 +7,8 @@ include ../Makefile.aws_array_list
 ###########
 #
 # Runtime: 180s
-
-# This is the minimum bound to reach full coverage rate
-UNWINDSET += __CPROVER_file_local_array_list_c_aws_array_list_mem_swap.0:$(shell echo $$(($(MAX_ITEM_SIZE) + 1)))
-UNWINDSET += memcpy_impl.0:$(shell echo $$(($(MAX_ITEM_SIZE) + 1)))
+ 
+APPLY_LOOP_CONTRACTS = 1
 
 CBMCFLAGS +=
 

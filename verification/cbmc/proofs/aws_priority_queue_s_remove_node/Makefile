@@ -11,7 +11,7 @@ include ../Makefile.aws_array_list
 ## This is here for the backpointer array list which contains pointers
 ## to aws_priority_queue_node elements. As pointers are 64bits, it is
 ## adequate to unroll the memcpy loop twice.
-UNWINDSET += memcpy_using_uint64_impl.0:2
+# UNWINDSET += memcpy_using_uint64_impl.0:2
 
 CBMCFLAGS +=
 
@@ -25,8 +25,8 @@ PROJECT_SOURCES += $(SRCDIR)/source/allocator.c
 PROOF_SOURCES += $(PROOF_SOURCE)/utils.c
 
 PROOF_SOURCES += $(PROOF_STUB)/error.c
-PROOF_SOURCES += $(PROOF_STUB)/memcpy_using_uint64.c
-PROOF_SOURCES += $(PROOF_STUB)/memset_override_no_op.c
+# PROOF_SOURCES += $(PROOF_STUB)/memcpy_using_uint64.c
+# PROOF_SOURCES += $(PROOF_STUB)/memset_override_no_op.c
 PROOF_SOURCES += $(PROOF_STUB)/s_sift_either_override.c
 PROOF_SOURCES += $(PROOF_STUB)/aws_array_list_swap_override.c
 

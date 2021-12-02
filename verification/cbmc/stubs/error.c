@@ -12,7 +12,7 @@ static AWS_THREAD_LOCAL int tl_last_error = 0;
  * error handler functions (unnecessary for the verification process).
  */
 void aws_raise_error_private(int err) {
-    tl_last_error = err;
+    // tl_last_error = err;
 }
 
 /**

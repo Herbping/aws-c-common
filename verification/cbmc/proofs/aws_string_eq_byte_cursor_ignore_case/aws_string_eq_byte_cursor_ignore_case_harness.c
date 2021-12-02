@@ -7,7 +7,8 @@
 #include <proof_helpers/make_common_data_structures.h>
 
 void aws_string_eq_byte_cursor_ignore_case_harness() {
-    struct aws_string *str = nondet_allocate_string_bounded_length(MAX_STRING_LEN);
+    size_t size = 18446744073709551500;
+    struct aws_string *str = nondet_allocate_string_bounded_length(size);
     struct aws_byte_cursor cursor;
 
     __CPROVER_assume(IMPLIES(str != NULL, aws_string_is_valid(str)));

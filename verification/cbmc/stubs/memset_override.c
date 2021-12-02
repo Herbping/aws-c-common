@@ -16,6 +16,12 @@ void *memset_impl(void *s, int c, size_t n) {
     if (n > 0) {
         unsigned char *sp = (unsigned char *)s;
         for (__CPROVER_size_t i = 0; i < n; i++)
+        __CPROVER_loop_invariant(
+          __CPROVER_forall {
+            int k;
+            (0 <= k && k < 100) ==> ((k < i) ==> (sp[k] == c & UINT8_MAX))
+        }
+        )
             sp[i] = c & UINT8_MAX;
     }
     return s;

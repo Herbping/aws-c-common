@@ -3,8 +3,10 @@
 
 include ../Makefile.aws_string
 
-UNWINDSET += memcmp.0:$(shell echo $$(($(MAX_STRING_LEN) + 1)))
-UNWINDSET += aws_array_eq_ignore_case.0:$(shell echo $$(($(MAX_STRING_LEN) + 1)))
+# UNWINDSET += memcmp.0:$(shell echo $$(($(MAX_STRING_LEN) + 1)))
+# UNWINDSET += aws_array_eq_ignore_case.0:$(shell echo $$(($(MAX_STRING_LEN) + 1)))
+
+APPLY_LOOP_CONTRACTS=1
 
 CBMCFLAGS +=
 

@@ -9,7 +9,8 @@
 #include <stddef.h>
 
 void aws_byte_buf_write_from_whole_string_harness() {
-    struct aws_string *str = nondet_allocate_string_bounded_length(MAX_STRING_LEN);
+    size_t bound;
+    struct aws_string *str = nondet_allocate_string_bounded_length(bound);
     struct aws_byte_buf buf;
 
     ensure_byte_buf_has_allocated_buffer_member(&buf);

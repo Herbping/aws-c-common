@@ -11,15 +11,15 @@ void aws_byte_buf_advance_harness() {
     struct aws_byte_buf buf;
     struct aws_byte_buf output;
     size_t len;
-
+    size_t bound;
     /* assumptions */
-    __CPROVER_assume(aws_byte_buf_is_bounded(&buf, MAX_BUFFER_SIZE));
+    __CPROVER_assume(aws_byte_buf_is_bounded(&buf, bound));
     ensure_byte_buf_has_allocated_buffer_member(&buf);
     __CPROVER_assume(aws_byte_buf_is_valid(&buf));
     if (nondet_bool()) {
         output = buf;
     } else {
-        __CPROVER_assume(aws_byte_buf_is_bounded(&output, MAX_BUFFER_SIZE));
+        __CPROVER_assume(aws_byte_buf_is_bounded(&output, bound));
         ensure_byte_buf_has_allocated_buffer_member(&output);
         __CPROVER_assume(aws_byte_buf_is_valid(&output));
     }

@@ -8,7 +8,8 @@
 
 void aws_byte_buf_append_harness() {
     struct aws_byte_buf to;
-    __CPROVER_assume(aws_byte_buf_is_bounded(&to, MAX_BUFFER_SIZE));
+    size_t bound;
+    __CPROVER_assume(aws_byte_buf_is_bounded(&to, bound));
     ensure_byte_buf_has_allocated_buffer_member(&to);
     __CPROVER_assume(aws_byte_buf_is_valid(&to));
 
@@ -16,7 +17,7 @@ void aws_byte_buf_append_harness() {
     struct aws_byte_buf to_old = to;
 
     struct aws_byte_cursor from;
-    __CPROVER_assume(aws_byte_cursor_is_bounded(&from, MAX_BUFFER_SIZE));
+    __CPROVER_assume(aws_byte_cursor_is_bounded(&from, bound));
     ensure_byte_cursor_has_allocated_buffer_member(&from);
     __CPROVER_assume(aws_byte_cursor_is_valid(&from));
 

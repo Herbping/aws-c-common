@@ -344,11 +344,7 @@ static int s_find_entry1(
      * Since probe_idx increments every loop iteration, it will become larger than entry_probe after at most state->size
      * transitions and the loop will exit (if it hasn't already)
      */
-    while (1) 
-    __CPROVER_loop_invariant (
-        true
-    )
-    {
+    while (1) {
 #ifdef CBMC
 #    pragma CPROVER check push
 #    pragma CPROVER check disable "unsigned-overflow"
@@ -437,11 +433,7 @@ static struct hash_table_entry *s_emplace_item(
 
     /* Since a valid hash_table has at least one empty element, this loop will always terminate in at most linear time
      */
-    while (entry.hash_code != 0) 
-    __CPROVER_loop_invariant (
-        true
-    )
-    {
+    while (entry.hash_code != 0) {
 #ifdef CBMC
 #    pragma CPROVER check push
 #    pragma CPROVER check disable "unsigned-overflow"
@@ -555,7 +547,6 @@ int aws_hash_table_create(
         /* If we expanded the table, we need to discard the probe index returned from find_entry,
          * as it's likely that we can find a more desirable slot. If we don't, then later gets will
          * terminate before reaching our probe index.
-
          * n.b. currently we ignore this probe_idx subsequently, but leaving
          this here so we don't
          * forget when we optimize later. */
@@ -720,11 +711,7 @@ int aws_hash_table_foreach(
     int (*callback)(void *context, struct aws_hash_element *pElement),
     void *context) {
 
-    for (struct aws_hash_iter iter = aws_hash_iter_begin(map); !aws_hash_iter_done(&iter); aws_hash_iter_next(&iter)) 
-    __CPROVER_loop_invariant(
-        true
-    )
-    {
+    for (struct aws_hash_iter iter = aws_hash_iter_begin(map); !aws_hash_iter_done(&iter); aws_hash_iter_next(&iter)) {
         int rv = callback(context, &iter.element);
         if (rv & AWS_COMMON_HASH_TABLE_ITER_ERROR) {
             int error = aws_last_error();
@@ -763,11 +750,7 @@ bool aws_hash_table_eq(
      * entries, we can simply iterate one and compare against the same key in
      * the other.
      */
-    for (size_t i = 0; i < a->p_impl->size; ++i) 
-    __CPROVER_loop_invariant(
-        true
-    )
-    {
+    for (size_t i = 0; i < a->p_impl->size; ++i) {
         const struct hash_table_entry *const a_entry = &a->p_impl->slots[i];
         if (a_entry->hash_code == 0) {
             continue;
@@ -809,8 +792,8 @@ static inline void s_get_next_element(struct aws_hash_iter *iter, size_t start_s
         ((i >= 0 && i <= limit) || ((start_slot >= limit) && (i <= start_slot))) // && ((iter->status == AWS_HASH_ITER_STATUS_DONE) ==> !(&state->slots[i].hash_code))
     )
     {
-        struct hash_table_entry *entry                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           = &state->slots[i];
-
+        struct hash_table_entry *entry = &state->slots[i];
+        
         if (entry->hash_code) {
             iter->element = entry->element;
             iter->slot = i;
@@ -943,12 +926,11 @@ void aws_hash_table_clear(struct aws_hash_table *map) {
     struct hash_table_state *state = map->p_impl;
 
     /* Check that we have at least one destructor before iterating over the table */
-    if (state->destroy_key_fn || state->destroy_value_fn) {
-        for (size_t i = 0; i < state->size; ++i) 
-        __CPROVER_loop_invariant(
-            true
-        )
-        {
+    if (state->destroy_key_fn || state->destroy_value_fn) 
+{
+        for (size_t i = 0; i < state->size; ++i)         __CPROVER_loop_invariant (
+        (i >= 0)
+    ){
             struct hash_table_entry *entry = &state->slots[i];
             if (!entry->hash_code) {
                 continue;

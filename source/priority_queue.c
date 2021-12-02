@@ -55,7 +55,10 @@ static bool s_sift_down(struct aws_priority_queue *queue, size_t root) {
 
     size_t len = aws_array_list_length(&queue->container);
 
-    while (LEFT_OF(root) < len) {
+    while (LEFT_OF(root) < len) 
+    __CPROVER_loop_invariant (
+        root < len
+    ){
         size_t left = LEFT_OF(root);
         size_t right = RIGHT_OF(root);
         size_t first = root;

@@ -444,6 +444,7 @@ int _memcmp(const void *s1, const void *s2, size_t n)
   const unsigned char *sc1, *sc2;
   sc1 = s1;
   sc2 = s2;
+
   for(; n!=0; n--)
   __CPROVER_loop_invariant (
     sc1 != NULL && sc2 != NULL)
@@ -457,8 +458,8 @@ int _memcmp(const void *s1, const void *s2, size_t n)
   __CPROVER_loop_invariant (    
         n <= __CPROVER_loop_entry(n))
   __CPROVER_loop_invariant (    
-        (n * sizeof(unsigned char) + __CPROVER_POINTER_OFFSET(sc1) ==  __CPROVER_loop_entry(n)) &&
-    (n * sizeof(unsigned char) + __CPROVER_POINTER_OFFSET(sc2) ==  __CPROVER_loop_entry(n) ))
+        (n * sizeof(unsigned char) + __CPROVER_POINTER_OFFSET(sc1) ==  __CPROVER_POINTER_OFFSET(__CPROVER_loop_entry(sc1)) + __CPROVER_loop_entry(n)) &&
+    (n * sizeof(unsigned char) + __CPROVER_POINTER_OFFSET(sc2) == __CPROVER_POINTER_OFFSET(__CPROVER_loop_entry(sc2)) + __CPROVER_loop_entry(n) ))
   {
     res = (*sc1++) - (*sc2++);
     if (res != 0)
@@ -538,7 +539,6 @@ bool aws_array_eq_c_str(const void *const array, const size_t array_len, const c
     )
     {
         uint8_t s = str_bytes[i];
-        uint8_t s1 = array_bytes[i];
         if (s == '\0') {
             return false;
         }
@@ -1583,7 +1583,7 @@ bool aws_byte_buf_write_u8_n(struct aws_byte_buf *buf, uint8_t c, size_t count) 
  */
 bool aws_byte_buf_write_be16(struct aws_byte_buf *buf, uint16_t x) {
     AWS_PRECONDITION(aws_byte_buf_is_valid(buf));
-    int y = ((int)x << 8) | ((int)x >> 8);
+    __uint16_t y = (__uint16_t)((x << 8) | (x >> 8));
     x = aws_hton16(x);
     return aws_byte_buf_write(buf, (uint8_t *)&x, 2);
 }

@@ -523,7 +523,7 @@ static void hashlittle2(
     __CPROVER_loop_invariant (    
         length <= __CPROVER_loop_entry(length))
     __CPROVER_loop_invariant (    
-        (length + __CPROVER_POINTER_OFFSET(k) ==  __CPROVER_loop_entry(length)))
+        (length + __CPROVER_POINTER_OFFSET(k) ==  __CPROVER_loop_entry(length) + __CPROVER_POINTER_OFFSET(__CPROVER_loop_entry(k))))
     {
       a += k[0];
       b += k[1];

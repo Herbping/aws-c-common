@@ -8,7 +8,10 @@ include ../Makefile.aws_array_list
 AWS_DEEP_CHECKS = 1
 
 # This bound allows us to reach 100% coverage rate
-UNWINDSET += memcpy_impl.0:$(shell echo $$(($(MAX_ITEM_SIZE) + 1)))
+# UNWINDSET += memcpy_impl.0:$(shell echo $$(($(MAX_ITEM_SIZE) + 1)))
+
+APPLY_LOOP_CONTRACTS = 1
+PROOF_SOURCES += $(PROOF_STUB)/memcpy_override.c
 
 CBMCFLAGS +=
 

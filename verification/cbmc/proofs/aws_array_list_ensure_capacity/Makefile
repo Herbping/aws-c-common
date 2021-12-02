@@ -6,6 +6,9 @@ include ../Makefile.aws_array_list
 
 UNWINDSET +=
 
+APPLY_LOOP_CONTRACTS = 1
+PROOF_SOURCES += $(PROOF_STUB)/memcpy_override.c
+
 CBMCFLAGS +=
 
 PROOF_UID = aws_array_list_ensure_capacity

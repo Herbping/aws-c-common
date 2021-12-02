@@ -5,7 +5,10 @@
 include ../Makefile.aws_array_list
 
 # This bound allows us to reach 100% coverage rate
-UNWINDSET += memset_impl.0:$(shell echo $$(($(MAX_ITEM_SIZE) + 1)))
+# UNWINDSET += memset_impl.0:$(shell echo $$(($(MAX_ITEM_SIZE) + 1)))
+
+APPLY_LOOP_CONTRACTS = 1
+# PROOF_SOURCES += $(PROOF_STUB)/memset_override.c
 
 CBMCFLAGS +=
 

@@ -428,14 +428,7 @@ bool aws_array_eq_ignore_case(
 
 int _memcmp(const void *s1, const void *s2, size_t n)
 {
-  __CPROVER_HIDE:;
   int res=0;
-  #ifdef __CPROVER_STRING_ABSTRACTION
-  __CPROVER_precondition(__CPROVER_buffer_size(s1)>=n,
-                         "memcmp buffer overflow of 1st argument");
-  __CPROVER_precondition(__CPROVER_buffer_size(s2)>=n,
-                         "memcmp buffer overflow of 2nd argument");
-  #else
   __CPROVER_precondition(__CPROVER_r_ok(s1, n),
                          "memcmp region 1 readable");
   __CPROVER_precondition(__CPROVER_r_ok(s2, n),
@@ -445,6 +438,8 @@ int _memcmp(const void *s1, const void *s2, size_t n)
   sc1 = s1;
   sc2 = s2;
 
+    #pragma CPROVER check push  
+    #pragma CPROVER check disable "pointer-primitive"
   for(; n!=0; n--)
   __CPROVER_loop_invariant (
     sc1 != NULL && sc2 != NULL)
@@ -461,11 +456,11 @@ int _memcmp(const void *s1, const void *s2, size_t n)
         (n * sizeof(unsigned char) + __CPROVER_POINTER_OFFSET(sc1) ==  __CPROVER_POINTER_OFFSET(__CPROVER_loop_entry(sc1)) + __CPROVER_loop_entry(n)) &&
     (n * sizeof(unsigned char) + __CPROVER_POINTER_OFFSET(sc2) == __CPROVER_POINTER_OFFSET(__CPROVER_loop_entry(sc2)) + __CPROVER_loop_entry(n) ))
   {
+    #pragma CPROVER check pop
     res = (*sc1++) - (*sc2++);
     if (res != 0)
       return res;
   }
-  #endif
   return res;
 }
 

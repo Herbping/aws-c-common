@@ -19,7 +19,7 @@ void aws_array_list_swap_harness() {
 
     /* assumptions */
     // __CPROVER_assume(aws_array_list_is_bounded(&list, MAX_INITIAL_ITEM_ALLOCATION, MAX_ITEM_SIZE));
-    __CPROVER_assume(list.item_size == 128);
+    __CPROVER_assume(list.item_size == 16);
     ensure_array_list_has_allocated_data_member(&list);
     __CPROVER_assume(aws_array_list_is_valid(&list));
 

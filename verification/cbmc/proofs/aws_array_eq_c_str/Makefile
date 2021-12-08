@@ -10,7 +10,7 @@ include ../Makefile.aws_byte_buf
 # USE_FUNCTION_CONTRACTS = _strlen
 # CHECK_FUNCTION_CONTRACTS = _strlen
 
-APPLY_LOOP_CONTRACTS=1
+APPLY_LOOP_CONTRACTS = 1
 
 CBMCFLAGS +=
 

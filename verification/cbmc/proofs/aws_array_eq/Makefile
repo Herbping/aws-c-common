@@ -6,7 +6,7 @@ include ../Makefile.aws_byte_buf
 
 # UNWINDSET += memcmp.0:$(shell echo $$(($(MAX_BUFFER_SIZE) + 1)))
 
-APPLY_LOOP_CONTRACTS = 1 
+APPLY_LOOP_CONTRACTS = 1
 
 CBMCFLAGS +=
 

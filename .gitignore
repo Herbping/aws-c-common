@@ -67,3 +67,5 @@ cmake-build*
 # CBMC files
 *.goto
 *.log
+.vscode/settings.json
+verification/cbmc/templates

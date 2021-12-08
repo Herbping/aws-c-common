@@ -5,7 +5,7 @@
 include ../Makefile.aws_byte_buf
 
 # UNWINDSET += aws_array_eq_c_str_ignore_case.0:$(shell echo $$(($(MAX_BUFFER_SIZE) + 1)))
-UNWINDSET += strlen.0:$(shell echo $$(($(MAX_BUFFER_SIZE) + 1)))
+# UNWINDSET += strlen.0:$(shell echo $$(($(MAX_BUFFER_SIZE) + 1)))
 
 APPLY_LOOP_CONTRACTS=1
 

@@ -69,3 +69,4 @@ cmake-build*
 *.log
 .vscode/settings.json
 verification/cbmc/templates
+verification/cbmc/templates

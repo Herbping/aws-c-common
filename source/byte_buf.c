@@ -340,6 +340,7 @@ int aws_byte_buf_cat(struct aws_byte_buf *dest, size_t number_of_args, ...) {
     va_start(ap, number_of_args);
 
     for (size_t i = 0; i < number_of_args; ++i) 
+    __CPROVER_assigns (i)
     __CPROVER_loop_invariant (
         (i >= 0)
     )

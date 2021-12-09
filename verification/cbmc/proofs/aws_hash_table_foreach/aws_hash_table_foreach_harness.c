@@ -15,7 +15,7 @@ int hash_table_foreach_proof_callback(void *context, struct aws_hash_element *pE
 
 void aws_hash_table_foreach_harness() {
     struct aws_hash_table map;
-    ensure_allocated_hash_table(&map, MAX_TABLE_SIZE);
+    ensure_allocated_hash_table(&map, MAX_MALLOC);
     __CPROVER_assume(aws_hash_table_is_valid(&map));
     map.p_impl->equals_fn = uninterpreted_equals_assert_inputs_nonnull;
     map.p_impl->hash_fn = uninterpreted_hasher;

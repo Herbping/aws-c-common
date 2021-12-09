@@ -11,9 +11,8 @@
 void aws_hash_byte_cursor_ptr_harness() {
     struct aws_byte_cursor cur;
 
-    size_t bound;
 
-    __CPROVER_assume(aws_byte_cursor_is_bounded(&cur,  bound));
+    __CPROVER_assume(aws_byte_cursor_is_bounded(&cur,  UINT32_MAX));
     ensure_byte_cursor_has_allocated_buffer_member(&cur);
     __CPROVER_assume(aws_byte_cursor_is_valid(&cur));
 

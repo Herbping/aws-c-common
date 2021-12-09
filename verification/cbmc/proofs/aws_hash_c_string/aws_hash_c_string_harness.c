@@ -9,7 +9,7 @@
 #include <proof_helpers/utils.h>
 
 void aws_hash_c_string_harness() {
-    const char *str = ensure_c_str_is_allocated(MAX_STRING_SIZE);
+    const char *str = ensure_c_str_is_allocated(UINT32_MAX);
 
     __CPROVER_assume(aws_c_string_is_valid(str));
 

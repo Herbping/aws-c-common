@@ -10,10 +10,12 @@
 MAX_STRING_SIZE ?= 32
 DEFINES += -DMAX_STRING_SIZE=$(MAX_STRING_SIZE)
 
-UNWINDSET += strlen.0:$(shell echo $$(( $(MAX_STRING_SIZE) + 1)))
-UNWINDSET += __CPROVER_file_local_lookup3_inl_hashlittle2.0:$(shell echo $$(( $$(( $(MAX_STRING_SIZE) / 12 )) +1 )) )
-UNWINDSET += __CPROVER_file_local_lookup3_inl_hashlittle2.1:$(shell echo $$(( $$(( $(MAX_STRING_SIZE) / 12 )) +1 )) )
-UNWINDSET += __CPROVER_file_local_lookup3_inl_hashlittle2.2:$(shell echo $$(( $$(( $(MAX_STRING_SIZE) / 12 )) +1 )) )
+# UNWINDSET += strlen.0:$(shell echo $$(( $(MAX_STRING_SIZE) + 1)))
+# UNWINDSET += __CPROVER_file_local_lookup3_inl_hashlittle2.0:$(shell echo $$(( $$(( $(MAX_STRING_SIZE) / 12 )) +1 )) )
+# UNWINDSET += __CPROVER_file_local_lookup3_inl_hashlittle2.1:$(shell echo $$(( $$(( $(MAX_STRING_SIZE) / 12 )) +1 )) )
+# UNWINDSET += __CPROVER_file_local_lookup3_inl_hashlittle2.2:$(shell echo $$(( $$(( $(MAX_STRING_SIZE) / 12 )) +1 )) )
+
+APPLY_LOOP_CONTRACTS = 1
 
 CBMCFLAGS +=
 

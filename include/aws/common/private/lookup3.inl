@@ -515,6 +515,8 @@ static void hashlittle2(
     const uint32_t *k = (const uint32_t *)key;         /* read 32-bit chunks */
 
     /*------ all but last block: aligned reads and affect 32 bits of (a,b,c) */
+    #pragma CPROVER check push  
+    #pragma CPROVER check disable "pointer-primitive"
     while (length > 12)
     __CPROVER_loop_invariant (
       __CPROVER_same_object(k, key))
@@ -525,6 +527,7 @@ static void hashlittle2(
     __CPROVER_loop_invariant (    
         (length + __CPROVER_POINTER_OFFSET(k) ==  __CPROVER_loop_entry(length) + __CPROVER_POINTER_OFFSET(__CPROVER_loop_entry(k))))
     {
+      #pragma CPROVER check pop
       a += k[0];
       b += k[1];
       c += k[2];
@@ -598,6 +601,8 @@ static void hashlittle2(
     const uint16_t *k = (const uint16_t *)key;         /* read 16-bit chunks */
 
     /*--------------- all but last block: aligned reads and different mixing */
+    #pragma CPROVER check push  
+    #pragma CPROVER check disable "pointer-primitive"
     while (length > 12)
     __CPROVER_loop_invariant (
       __CPROVER_same_object(k, key))
@@ -608,6 +613,7 @@ static void hashlittle2(
     __CPROVER_loop_invariant (    
         (length + __CPROVER_POINTER_OFFSET(k) ==  __CPROVER_loop_entry(length)))
     {
+      #pragma CPROVER check pop
       a += k[0] + (((uint32_t)k[1])<<16);
       b += k[2] + (((uint32_t)k[3])<<16);
       c += k[4] + (((uint32_t)k[5])<<16);
@@ -652,6 +658,8 @@ static void hashlittle2(
     const uint8_t *k = (const uint8_t *)key;
 
     /*--------------- all but the last block: affect some 32 bits of (a,b,c) */
+    #pragma CPROVER check push  
+    #pragma CPROVER check disable "pointer-primitive"
     while (length > 12)
     __CPROVER_loop_invariant (
       __CPROVER_same_object(k, key))
@@ -662,6 +670,7 @@ static void hashlittle2(
     __CPROVER_loop_invariant (    
         (length + __CPROVER_POINTER_OFFSET(k) ==  __CPROVER_loop_entry(length)))
     {
+      #pragma CPROVER check pop
       a += k[0];
       a += ((uint32_t)k[1])<<8;
       a += ((uint32_t)k[2])<<16;

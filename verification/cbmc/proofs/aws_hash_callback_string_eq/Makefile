@@ -10,7 +10,9 @@
 MAX_STRING_LEN ?= 96
 DEFINES += -DMAX_STRING_LEN=$(MAX_STRING_LEN)
 
-UNWINDSET += memcmp.0:$(shell echo $$(($(MAX_STRING_LEN) + 1)))
+# UNWINDSET += memcmp.0:$(shell echo $$(($(MAX_STRING_LEN) + 1)))
+
+APPLY_LOOP_CONTRACTS = 1
 
 CBMCFLAGS +=
 

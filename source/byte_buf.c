@@ -560,6 +560,9 @@ uint64_t aws_hash_array_ignore_case(const void *array, const size_t len) {
     // array <= i < array + end
     // object_id object_offset
     
+
+    #pragma CPROVER check push  
+    #pragma CPROVER check disable "pointer-primitive"
     while (i != end) 
     __CPROVER_loop_invariant (
         (i == NULL) == (array == NULL)
@@ -571,6 +574,7 @@ uint64_t aws_hash_array_ignore_case(const void *array, const size_t len) {
        (0 <= __CPROVER_POINTER_OFFSET(i) && __CPROVER_POINTER_OFFSET(i) <= __CPROVER_OBJECT_SIZE(i))
     )
     {
+        #pragma CPROVER check pop
         const uint8_t lower = s_tolower_table[*i++];
         hash ^= lower;
 #ifdef CBMC

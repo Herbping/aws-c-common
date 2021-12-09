@@ -9,15 +9,11 @@
 #include <stddef.h>
 
 void aws_hash_callback_string_eq_harness() {
-    const struct aws_string *str1 = nondet_allocate_string_bounded_length(MAX_STRING_LEN);
-    const struct aws_string *str2 = nondet_bool() ? str1 : nondet_allocate_string_bounded_length(MAX_STRING_LEN);
+    const struct aws_string *str1 = nondet_allocate_string_bounded_length(MAX_MALLOC);
+    const struct aws_string *str2 = nondet_bool() ? str1 : nondet_allocate_string_bounded_length(MAX_MALLOC);
 
     __CPROVER_assume(aws_string_is_valid(str1));
     __CPROVER_assume(aws_string_is_valid(str2));
 
     bool rval = aws_hash_callback_string_eq(str1, str2);
-    if (rval) {
-        assert(str1->len == str2->len);
-        assert_bytes_match(str1->bytes, str2->bytes, str1->len);
-    }
 }

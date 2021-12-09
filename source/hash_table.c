@@ -956,13 +956,23 @@ void aws_hash_table_clear(struct aws_hash_table *map) {
     AWS_POSTCONDITION(aws_hash_table_is_valid(map));
 }
 
+size_t _strlen(const char *s)
+{
+  __CPROVER_size_t len=0;
+  while(s[len]!=0)
+  __CPROVER_loop_invariant (
+    (0 <= len) && (len < __CPROVER_OBJECT_SIZE(s)) 
+    )
+    len++;
+  return len;
+}
 uint64_t aws_hash_c_string(const void *item) {
     AWS_PRECONDITION(aws_c_string_is_valid(item));
     const char *str = item;
 
     /* first digits of pi in hex */
     uint32_t b = 0x3243F6A8, c = 0x885A308D;
-    hashlittle2(str, strlen(str), &c, &b);
+    hashlittle2(str, _strlen(str), &c, &b);
 
     return ((uint64_t)b << 32) | c;
 }

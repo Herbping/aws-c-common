@@ -11,7 +11,7 @@ void aws_hash_byte_cursor_ptr_ignore_case_harness() {
     struct aws_byte_cursor cur;
 
     /* assumptions */
-    __CPROVER_assume(aws_byte_cursor_is_bounded(&cur, MAX_BUFFER_SIZE));
+    __CPROVER_assume(aws_byte_cursor_is_bounded(&cur, UINT32_MAX));
     ensure_byte_cursor_has_allocated_buffer_member(&cur);
     __CPROVER_assume(aws_byte_cursor_is_valid(&cur));
     __CPROVER_assume(AWS_MEM_IS_READABLE(cur.ptr, cur.len));

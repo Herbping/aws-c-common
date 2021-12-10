@@ -712,7 +712,7 @@ int aws_hash_table_foreach(
     void *context) {
 
     for (struct aws_hash_iter iter = aws_hash_iter_begin(map); !aws_hash_iter_done(&iter); aws_hash_iter_next(&iter))
-    __CPROVER_assigns(iter.slot, iter.status, iter.element.key, iter.element.value, iter.map->p_impl->entry_count)
+    __CPROVER_assigns(iter.slot, iter.status, iter.element.key, iter.element.value, iter.limit, iter.map->p_impl->entry_count)
     __CPROVER_loop_invariant(0 <= iter.slot && iter.slot <= iter.limit)
     __CPROVER_loop_invariant(iter.slot == iter.limit ==> iter.status == AWS_HASH_ITER_STATUS_DONE)
     __CPROVER_loop_invariant(iter.slot < iter.limit ==> iter.status == AWS_HASH_ITER_STATUS_READY_FOR_USE)

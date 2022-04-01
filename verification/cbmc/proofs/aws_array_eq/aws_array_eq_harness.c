@@ -41,11 +41,4 @@ void aws_array_eq_harness() {
         }
     }
 
-    /* asserts both parameters remain unchanged */
-    if (lhs_len > 0 && lhs) {
-        assert_byte_from_buffer_matches((uint8_t *)lhs, &old_byte_from_lhs);
-    }
-    if (rhs_len > 0 && rhs) {
-        assert_byte_from_buffer_matches((uint8_t *)rhs, &old_byte_from_rhs);
-    }
 }

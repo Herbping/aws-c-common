@@ -342,7 +342,7 @@ int aws_byte_buf_cat(struct aws_byte_buf *dest, size_t number_of_args, ...) {
     for (size_t i = 0; i < number_of_args; ++i) 
     __CPROVER_assigns (i)
     __CPROVER_loop_invariant (
-        (i >= 0)
+        true
     )
     {
         struct aws_byte_buf *buffer = va_arg(ap, struct aws_byte_buf *);
@@ -416,7 +416,7 @@ bool aws_array_eq_ignore_case(
     const uint8_t *bytes_b = array_b;
     for (size_t i = 0; i < len_a; ++i) 
     __CPROVER_loop_invariant (
-        (i >= 0)
+        true
     )
     {
         if (s_tolower_table[bytes_a[i]] != s_tolower_table[bytes_b[i]]) {
@@ -530,8 +530,7 @@ bool aws_array_eq_c_str(const void *const array, const size_t array_len, const c
     
     for (size_t i = 0; i < array_len; ++i) 
     __CPROVER_loop_invariant (
-        (0 <= i) && (i <= __CPROVER_OBJECT_SIZE(str_bytes)) &&
-        (i == 0|| str_bytes[i-1] != 0)
+        (i < __CPROVER_OBJECT_SIZE(str_bytes))
     )
     {
         uint8_t s = str_bytes[i];
@@ -564,9 +563,6 @@ uint64_t aws_hash_array_ignore_case(const void *array, const size_t len) {
     #pragma CPROVER check push  
     #pragma CPROVER check disable "pointer-primitive"
     while (i != end) 
-    __CPROVER_loop_invariant (
-        (i == NULL) == (array == NULL)
-    )
     __CPROVER_loop_invariant (
         __CPROVER_same_object(i, array)
     )
@@ -673,7 +669,7 @@ int aws_byte_buf_append_with_lookup(
 
     for (size_t i = 0; i < from->len; ++i) 
     __CPROVER_assigns(i, __CPROVER_POINTER_OBJECT(to->buffer))
-    __CPROVER_loop_invariant(i <= from->len)
+    __CPROVER_loop_invariant(true)
     {
         to->buffer[to->len + i] = lookup_table[from->ptr[i]];
     }

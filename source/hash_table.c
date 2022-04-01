@@ -344,7 +344,10 @@ static int s_find_entry1(
      * Since probe_idx increments every loop iteration, it will become larger than entry_probe after at most state->size
      * transitions and the loop will exit (if it hasn't already)
      */
-    while (1) {
+    while (1) 
+    __CPROVER_assigns(rv, p_probe_idx, entry, probe_idx)
+    __CPROVER_loop_invariant (true)
+    {
 #ifdef CBMC
 #    pragma CPROVER check push
 #    pragma CPROVER check disable "unsigned-overflow"
@@ -793,8 +796,9 @@ static inline void s_get_next_element(struct aws_hash_iter *iter, size_t start_s
     size_t limit = iter->limit;
 
     for (size_t i = start_slot; i < limit; i++) 
+    __CPROVER_assigns(i, iter->element, iter->slot, iter->status)
     __CPROVER_loop_invariant (
-        ((i >= 0 && i <= limit) || ((start_slot >= limit) && (i <= start_slot))) // && ((iter->status == AWS_HASH_ITER_STATUS_DONE) ==> !(&state->slots[i].hash_code))
+       true // && ((iter->status == AWS_HASH_ITER_STATUS_DONE) ==> !(&state->slots[i].hash_code))
     )
     {
         struct hash_table_entry *entry = &state->slots[i];
@@ -933,8 +937,9 @@ void aws_hash_table_clear(struct aws_hash_table *map) {
     /* Check that we have at least one destructor before iterating over the table */
     if (state->destroy_key_fn || state->destroy_value_fn) 
 {
-        for (size_t i = 0; i < state->size; ++i)         __CPROVER_loop_invariant (
-        (i >= 0)
+        for (size_t i = 0; i < state->size; ++i)         
+        __CPROVER_loop_invariant (
+        true
     ){
             struct hash_table_entry *entry = &state->slots[i];
             if (!entry->hash_code) {

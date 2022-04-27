@@ -10,21 +10,7 @@
 
 void aws_hash_table_create_harness() {
     struct aws_hash_table map;
-    // ensure_allocated_hash_table(&map, MAX_TABLE_SIZE);
-
-    size_t num_entries;
-    __CPROVER_assume(aws_is_power_of_two(num_entries));
-
-    size_t required_bytes;
-    __CPROVER_assume(!hash_table_state_required_bytes(num_entries, &required_bytes));
-    struct hash_table_state *impl = malloc(required_bytes);
-    if (impl) {
-        impl->size = num_entries;
-        map.p_impl = impl;
-    } else {
-        map.p_impl = NULL;
-    }
-
+    ensure_allocated_hash_table(&map, 4);
     __CPROVER_assume(aws_hash_table_is_valid(&map));
     map.p_impl->equals_fn = uninterpreted_equals_assert_inputs_nonnull;
     map.p_impl->hash_fn = uninterpreted_hasher;
@@ -39,22 +25,5 @@ void aws_hash_table_create_harness() {
     int was_created;
 
     struct hash_table_state old_state = *map.p_impl;
-
     int rval = aws_hash_table_create(&map, key, get_p_elem ? &p_elem : NULL, track_was_created ? &was_created : NULL);
-    assert(aws_hash_table_is_valid(&map));
-    if (rval == AWS_OP_SUCCESS) {
-        if (track_was_created) {
-            assert(map.p_impl->entry_count == old_state.entry_count + was_created);
-        } else {
-            assert(
-                map.p_impl->entry_count == old_state.entry_count ||
-                map.p_impl->entry_count == old_state.entry_count + 1);
-        }
-
-        if (get_p_elem) {
-            assert(uninterpreted_equals(p_elem->key, key));
-        }
-    } else {
-        assert(map.p_impl->entry_count == old_state.entry_count);
-    }
 }

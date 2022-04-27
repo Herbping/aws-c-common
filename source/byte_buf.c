@@ -555,11 +555,6 @@ uint64_t aws_hash_array_ignore_case(const void *array, const size_t len) {
 
     uint64_t hash = fnv_offset_basis;
 
-    
-    // array <= i < array + end
-    // object_id object_offset
-    
-
     #pragma CPROVER check push  
     #pragma CPROVER check disable "pointer-primitive"
     while (i != end) 
